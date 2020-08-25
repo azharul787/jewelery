@@ -1,0 +1,26 @@
+/*============================= Product wise Stock ======================-*/
+CREATE VIEW product_stocks AS
+SELECT purchase_details.product_id, 
+	purchase_details.category_id, 
+	purchase_details.brand_id,
+	purchase_details.unit_id,
+	products.re_order_label,
+ SUM(purchase_details.now_stock) as product_stock
+ FROM purchase_details,products WHERE purchase_details.now_stock > 0 and purchase_details.product_id = products.id 
+GROUP by purchase_details.product_id 
+
+/*========================== Purchase Stocks Table====================*/
+
+CREATE VIEW purchase_stocks AS
+ SELECT purchase_details.*, products.product_name FROM products,purchase_details 
+	WHERE purchase_details.now_stock > 0
+		AND purchase_details.product_id = products.id
+/*============= income expense table ==============*/
+
+CREATE TABLE IF NOT EXISTS income_expenses (
+    user_id     INT NOT NULL,
+    transaction_date  DATE NOT NULL,
+	description VARCHAR(191) NOT NULL,
+    income_amount  DECIMAL(10,2)   DEFAULT NULL,
+    expense_amount   DECIMAL(10,2) DEFAULT NULL
+);
